@@ -2,11 +2,17 @@ import React, {useState, useEffect} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 
-
+interface INavWrapperProps {
+  show: boolean;
+}
 
 const Nav = () => {
 
-  const [show, setShow] = useState(false);
+  
+    
+  
+
+  const [show, setShow] = useState<boolean>(false);
   const { pathname } = useLocation();
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -33,7 +39,7 @@ const Nav = () => {
   }
   
 
-  const handleChange = (e) => {
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
     navigate(`/search?q=${e.target.value}`);
   }
@@ -49,7 +55,7 @@ const Nav = () => {
         />
       </Logo>
 
-      {pathname === "/" ? 
+      {/* {pathname === "/" ? 
       (<Login>Login</Login>) :
       
       <Input
@@ -57,7 +63,7 @@ const Nav = () => {
           onChange={handleChange}
           className='nav__input'
           type="text"
-          placeholder='검색해주세요' />}
+          placeholder='검색해주세요' />} */}
 
     </NavWrapper>
   )
@@ -99,7 +105,7 @@ const NavWrapper = styled.nav`
   left: 0;
   right: 0;
   height: 70px;
-  background-color: ${props => props.show ? "#090b13" : "transparent"};
+  background-color: ${(props: INavWrapperProps) => props.show ? "#090b13" : "transparent"};
   display: flex;
   justify-content: space-between;
   align-items: center;

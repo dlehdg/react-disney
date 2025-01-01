@@ -4,11 +4,33 @@ import axios from '../api/axios'
 import "./Row.css";
 import MovieModal from './MovieModal';
 
-function Row( {title, id, fetchUrl} ) {
+interface IRowProps {
+  title : string;
+  id: string;
+  fetchUrl : string;
+}
 
-    const [movies, setMovies] = useState([]);
+interface IMovie {
+  id : string;
+  name : string;
+  backdrop_path: string;
+  title: string;
+  overview: string;
+  release_date: string;
+  first_air_date: string;
+  vote_average: number;
+}
+
+
+interface IMovieModalProps extends IMovie {
+  setModalOpen: (open: boolean) => void;
+}
+
+function Row( {title, id, fetchUrl} : IRowProps) {
+
+    const [movies, setMovies] = useState<IMovie[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [movieSelected, setMovieSelected] = useState({});
+    const [movieSelected, setMovieSelected] = useState<IMovie | null>(null);
 
   // fetchMovieData가 변경시에 즉 새로 생성되는 경우는 fetchUrl이 변경될 때 새로 생성
 
@@ -25,7 +47,7 @@ function Row( {title, id, fetchUrl} ) {
         fetchMovieData();
     }, [fetchMovieData])
 
-    const handleClick = (movie) => {
+    const handleClick = (movie : IMovie) => {
       setModalOpen(true);
       setMovieSelected(movie);
     };
@@ -40,14 +62,14 @@ function Row( {title, id, fetchUrl} ) {
             <div className ="slider__arrow-left">
                 <span className ="arrow"
                 onClick={() => {
-                  document.getElementById(id).scrollLeft -= window.innerWidth -80
+                  document.getElementById(id)!.scrollLeft -= window.innerWidth -80
                 }}>
                     {"<"}
                 </span>  
             </div>
 
             <div id={id} className='row__posters'>
-                {movies.map(movie => (
+                {movies.map((movie) => (
                     <img
                         key={movie.id}
                         className='row__poster'
@@ -61,7 +83,7 @@ function Row( {title, id, fetchUrl} ) {
             <div className ="slider__arrow-right">
                 <span className ="arrow"
                 onClick={() => {
-                  document.getElementById(id).scrollLeft += window.innerWidth -80
+                  document.getElementById(id)!.scrollLeft += window.innerWidth -80
                 }}>
                     {">"}
                 </span>  
@@ -69,7 +91,7 @@ function Row( {title, id, fetchUrl} ) {
 
         </div>
         
-        {modalOpen && 
+        {modalOpen && movieSelected &&
           <MovieModal
             {...movieSelected}
             setModalOpen = {setModalOpen}
